@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from sqlalchemy.orm import Session
 
@@ -14,6 +14,8 @@ from app.schemas.auth_schema import RegisterRequest, LoginRequest
 from app.core.security import hash_password, verify_password
 
 from app.services.jwt_service import (create_access_token)
+
+from app.middleware.auth_middleware import (get_current_user)
 
 
 router = APIRouter()
@@ -58,15 +60,15 @@ def register_user(request: RegisterRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/login")
-def login_user(request: LoginRequest, db: Session = Depends(get_db)):
+def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
 
-    user = db.query(User).filter(User.email == request.email).first()
+    user = db.query(User).filter(User.email == form_data.username).first()
 
     if not user:
 
         raise HTTPException(status_code=401, detail="invalid email or password")
 
-    password_valid = verify_password(request.password, user.password_hash)
+    password_valid = verify_password(form_data.password, user.password_hash)
 
     if not password_valid:
 
@@ -75,3 +77,9 @@ def login_user(request: LoginRequest, db: Session = Depends(get_db)):
     access_token = create_access_token({"sub": user.email, "role": user.role.name})
 
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.get("/protected")
+def protected_route(current_user = Depends(get_current_user)):
+
+    return {"message": "protected route accessed", "user": current_user}

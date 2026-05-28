@@ -17,6 +17,8 @@ from app.services.jwt_service import (create_access_token)
 
 from app.middleware.auth_middleware import (get_current_user)
 
+from app.services.rbac_service import (RoleChecker)
+
 
 router = APIRouter()
 
@@ -83,3 +85,9 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
 def protected_route(current_user = Depends(get_current_user)):
 
     return {"message": "protected route accessed", "user": current_user}
+
+
+@router.get("/admin-only")
+def admin_only_route(current_user = Depends(RoleChecker(["admin"]))):
+
+    return {"message": "admin access granted","user": current_user}

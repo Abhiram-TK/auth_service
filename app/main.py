@@ -6,18 +6,17 @@ from app.models.user import User
 from app.models.role import Role
 from app.models.permission import Permission
 
-from app.core.security import (hash_password, verify_password)
+from app.routes.auth_routes import router as auth_router
 
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+app.include_router(auth_router)
+
 @app.get("/")
 def home():
 
-    password = "mypassword123"
-    hashed_password = hash_password(password)
-    verified = verify_password(password, hashed_password)
-
-    return {"plain_password": password, "hashed_password": hashed_password, "verified": verified}
+    return {"message": "Authentication service running"}
+    

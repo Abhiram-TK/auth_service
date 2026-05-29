@@ -19,6 +19,8 @@ from app.middleware.auth_middleware import (get_current_user)
 
 from app.services.rbac_service import (RoleChecker)
 
+from app.core.logger import logger
+
 
 router = APIRouter()
 
@@ -58,6 +60,8 @@ def register_user(request: RegisterRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
 
+    logger.info(f"User registered: {new_user.email}")
+
     return {"message": "user created"}
 
 
@@ -78,11 +82,17 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
 
     access_token = create_access_token({"sub": user.email, "role": user.role.name})
 
+    logger.info(f"Token generated for: {user.email}")
+
+    logger.info(f"User login success: {user.email}")
+
     return {"access_token": access_token, "token_type": "bearer"}
 
 
 @router.get("/protected")
 def protected_route(current_user = Depends(get_current_user)):
+
+    logger.info(f"Protected route accessed by: {current_user['sub']}")
 
     return {"message": "protected route accessed", "user": current_user}
 

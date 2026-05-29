@@ -1,0 +1,25 @@
+2026-05-29 18:35:56,819 - INFO - Auth service started
+2026-05-29 18:36:00,740 - INFO - Auth service started
+2026-05-29 18:36:13,553 - INFO - Auth service started
+2026-05-29 18:45:51,197 - INFO - Auth service started
+2026-05-29 18:45:54,970 - INFO - Auth service started
+2026-05-29 18:47:16,241 - INFO - User registered: logging@test.com
+2026-05-29 18:52:12,814 - INFO - Token generated for: logging@test.com
+2026-05-29 18:52:12,814 - INFO - User login success: logging@test.com
+2026-05-29 18:55:01,909 - INFO - Token generated for: user@test.com
+2026-05-29 18:55:01,911 - INFO - User login success: user@test.com
+2026-05-29 18:56:18,277 - INFO - Token generated for: user@test.com
+2026-05-29 18:56:18,277 - INFO - User login success: user@test.com
+2026-05-29 18:56:21,747 - INFO - Protected route accessed by: user@test.com
+2026-05-29 18:56:57,934 - INFO - Token generated for: user@test.com
+2026-05-29 18:56:57,935 - INFO - User login success: user@test.com
+2026-05-29 19:01:39,524 - INFO - Token generated for: user@test.com
+2026-05-29 19:01:39,525 - INFO - User login success: user@test.com
+2026-05-29 19:01:42,150 - INFO - Protected route accessed by: user@test.com
+2026-05-29 19:05:14,629 - INFO - Auth service started
+2026-05-29 19:05:18,914 - INFO - Auth service started
+2026-05-29 19:06:12,522 - INFO - Token generated for: logging@test.com
+2026-05-29 19:06:12,523 - INFO - User login success: logging@test.com
+2026-05-29 19:06:26,592 - INFO - Token generated for: logging@test.com
+2026-05-29 19:06:26,593 - INFO - User login success: logging@test.com
+2026-05-29 19:06:36,849 - INFO - Protected route accessed by: logging@test.com

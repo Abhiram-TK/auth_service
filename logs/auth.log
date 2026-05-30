@@ -82,3 +82,11 @@
 2026-05-30 20:13:10,244 - INFO - User login success: user@test.com
 2026-05-30 20:15:12,324 - ERROR - JWT validation failed
 2026-05-30 20:15:42,257 - INFO - Auth service started
+2026-05-30 20:19:20,884 - INFO - Auth service started
+2026-05-30 20:19:24,479 - INFO - Auth service started
+2026-05-30 20:20:25,412 - INFO - User registered: rbacdenial@test.com
+2026-05-30 20:20:56,585 - INFO - Token generated for: rbacdenial@test.com
+2026-05-30 20:20:56,587 - INFO - User login success: rbacdenial@test.com
+2026-05-30 20:21:16,444 - INFO - Token generated for: rbacdenial@test.com
+2026-05-30 20:21:16,444 - INFO - User login success: rbacdenial@test.com
+2026-05-30 20:21:25,773 - ERROR - RBAC denied - role=viewer

@@ -56,9 +56,17 @@ def register_user(request: RegisterRequest, db: Session = Depends(get_db)):
 
     new_user = User(email=request.email, username=request.username, password_hash=hashed_password, role_id=default_role.id, is_active=True)
 
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
+    try:
+
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+
+    except Exception as e:
+
+        logger.error(f"Database failure during registration: {str(e)}")
+
+        raise HTTPException(status_code=500, detail="Database operation failed")
 
     logger.info(f"User registered: {new_user.email}")
 

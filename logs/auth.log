@@ -23,3 +23,62 @@
 2026-05-29 19:06:26,592 - INFO - Token generated for: logging@test.com
 2026-05-29 19:06:26,593 - INFO - User login success: logging@test.com
 2026-05-29 19:06:36,849 - INFO - Protected route accessed by: logging@test.com
+2026-05-30 15:27:26,422 - INFO - Auth service started
+2026-05-30 15:27:31,317 - INFO - Auth service started
+2026-05-30 15:28:18,471 - ERROR - Login failed - email not found: fake@test.com
+2026-05-30 15:29:12,036 - ERROR - Login failed - invalid password: user@test.com
+2026-05-30 15:31:36,667 - INFO - Auth service started
+2026-05-30 15:32:32,054 - INFO - Auth service started
+2026-05-30 15:32:35,708 - INFO - Auth service started
+2026-05-30 15:33:58,381 - ERROR - Login failed - email not found: string
+2026-05-30 15:34:36,279 - ERROR - Login failed - invalid password: user@test.com
+2026-05-30 15:34:58,980 - INFO - Token generated for: user@test.com
+2026-05-30 15:34:58,980 - INFO - User login success: user@test.com
+2026-05-30 15:35:12,142 - INFO - Protected route accessed by: user@test.com
+2026-05-30 15:43:43,761 - INFO - Auth service started
+2026-05-30 15:43:48,076 - INFO - Auth service started
+2026-05-30 15:44:22,255 - INFO - Token generated for: user@test.com
+2026-05-30 15:44:22,255 - INFO - User login success: user@test.com
+2026-05-30 15:51:27,775 - INFO - Auth service started
+2026-05-30 15:51:32,140 - INFO - Auth service started
+2026-05-30 15:52:19,647 - INFO - Token generated for: user@test.com
+2026-05-30 15:52:19,648 - INFO - User login success: user@test.com
+2026-05-30 15:58:11,824 - INFO - Auth service started
+2026-05-30 15:58:16,439 - INFO - Auth service started
+2026-05-30 16:03:42,970 - INFO - Auth service started
+2026-05-30 16:03:47,391 - INFO - Auth service started
+2026-05-30 16:04:37,464 - INFO - Token generated for: user@test.com
+2026-05-30 16:04:37,464 - INFO - User login success: user@test.com
+2026-05-30 16:13:05,122 - INFO - Auth service started
+2026-05-30 16:14:40,166 - INFO - Auth service started
+2026-05-30 16:14:54,705 - INFO - Auth service started
+2026-05-30 16:14:58,400 - INFO - Auth service started
+2026-05-30 16:15:43,312 - INFO - Token generated for: user@test.com
+2026-05-30 16:15:43,313 - INFO - User login success: user@test.com
+2026-05-30 16:19:54,670 - INFO - Auth service started
+2026-05-30 16:19:58,505 - INFO - Auth service started
+2026-05-30 16:20:47,991 - INFO - Token generated for: user@test.com
+2026-05-30 16:20:47,992 - INFO - User login success: user@test.com
+2026-05-30 16:21:10,133 - INFO - Token generated for: user@test.com
+2026-05-30 16:21:10,133 - INFO - User login success: user@test.com
+2026-05-30 16:21:41,414 - INFO - Token generated for: user@test.com
+2026-05-30 16:21:41,415 - INFO - User login success: user@test.com
+2026-05-30 16:22:12,868 - INFO - Token generated for: user@test.com
+2026-05-30 16:22:12,869 - INFO - User login success: user@test.com
+2026-05-30 16:22:17,320 - INFO - Protected route accessed by: user@test.com
+2026-05-30 16:23:24,660 - INFO - Token generated for: user@test.com
+2026-05-30 16:23:24,661 - INFO - User login success: user@test.com
+2026-05-30 16:23:38,749 - INFO - Token generated for: user@test.com
+2026-05-30 16:23:38,749 - INFO - User login success: user@test.com
+2026-05-30 16:23:50,297 - INFO - Protected route accessed by: user@test.com
+2026-05-30 20:08:35,651 - INFO - Auth service started
+2026-05-30 20:08:39,213 - INFO - Auth service started
+2026-05-30 20:10:17,600 - ERROR - Authentication failed - missing tokens
+2026-05-30 20:12:13,520 - INFO - Auth service started
+2026-05-30 20:12:17,001 - INFO - Auth service started
+2026-05-30 20:12:56,590 - INFO - Token generated for: user@test.com
+2026-05-30 20:12:56,590 - INFO - User login success: user@test.com
+2026-05-30 20:13:10,243 - INFO - Token generated for: user@test.com
+2026-05-30 20:13:10,244 - INFO - User login success: user@test.com
+2026-05-30 20:15:12,324 - ERROR - JWT validation failed
+2026-05-30 20:15:42,257 - INFO - Auth service started

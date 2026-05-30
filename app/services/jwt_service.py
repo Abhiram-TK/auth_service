@@ -28,4 +28,6 @@ def decode_access_token(token: str):
 
     except JWTError:
 
+        print("JWT ERROR DETECTED")
+
         return None

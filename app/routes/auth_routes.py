@@ -72,11 +72,15 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
 
     if not user:
 
+        logger.error(f"Login failed - email not found: {form_data.username}")
+
         raise HTTPException(status_code=401, detail="invalid email or password")
 
     password_valid = verify_password(form_data.password, user.password_hash)
 
     if not password_valid:
+
+        logger.error(f"Login failed - invalid password: {user.email}")
 
         raise HTTPException(status_code=401, detail="invalid email or password")
 

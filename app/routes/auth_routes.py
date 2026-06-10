@@ -4,6 +4,8 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from sqlalchemy.orm import Session
 
+from datetime import datetime
+
 from app.database.connection import get_db
 
 from app.models.user import User
@@ -11,15 +13,13 @@ from app.models.role import Role
 
 from app.schemas.auth_schema import RegisterRequest, LoginRequest
 
+from app.core.logger import logger
 from app.core.security import hash_password, verify_password
 
+from app.services.rbac_service import (RoleChecker)
 from app.services.jwt_service import (create_access_token)
 
 from app.middleware.auth_middleware import (get_current_user)
-
-from app.services.rbac_service import (RoleChecker)
-
-from app.core.logger import logger
 
 
 router = APIRouter()
@@ -84,6 +84,12 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
 
         raise HTTPException(status_code=401, detail="invalid email or password")
 
+    if not user.is_active:
+
+        logger.error(f"Login blocked - inactive account: {user.email}")
+
+        raise HTTPException(status_code=403, detail="User account is disabled")
+    
     password_valid = verify_password(form_data.password, user.password_hash)
 
     if not password_valid:
@@ -91,6 +97,11 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
         logger.error(f"Login failed - invalid password: {user.email}")
 
         raise HTTPException(status_code=401, detail="invalid email or password")
+    
+    user.last_login = datetime.utcnow()
+
+    db.commit()
+    db.refresh(user)
 
     access_token = create_access_token({"sub": user.email, "role": user.role.name})
 

@@ -103,7 +103,7 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
     db.commit()
     db.refresh(user)
 
-    access_token = create_access_token({"sub": user.email, "role": user.role.name})
+    access_token = create_access_token({"user_id": user.id,"email": user.email, "role": user.role.name, "is_active": user.is_active})
 
     logger.info(f"Token generated for: {user.email}")
 
@@ -115,7 +115,7 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
 @router.get("/protected")
 def protected_route(current_user = Depends(get_current_user)):
 
-    logger.info(f"Protected route accessed by: {current_user['sub']}")
+    logger.info(f"Protected route accessed by: {current_user['email']}")
 
     return {"message": "protected route accessed", "user": current_user}
 

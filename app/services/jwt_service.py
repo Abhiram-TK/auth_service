@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from jose import jwt, JWTError
 
 from app.core.config import settings
+from app.core.logger import logger
 
 
 def create_access_token(data: dict):
@@ -28,6 +29,6 @@ def decode_access_token(token: str):
 
     except JWTError:
 
-        print("JWT ERROR DETECTED")
+        logger.error("JWT validation failed")
 
         return None

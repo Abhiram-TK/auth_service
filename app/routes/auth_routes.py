@@ -112,15 +112,15 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.get("/protected")
-def protected_route(current_user = Depends(get_current_user)):
+@router.get("/me")
+def get_current_profile(current_user = Depends(get_current_user)):
 
     logger.info(f"Protected route accessed by: {current_user['email']}")
 
-    return {"message": "protected route accessed", "user": current_user}
+    return {"user": current_user}
 
 
-@router.get("/admin-only")
-def admin_only_route(current_user = Depends(RoleChecker(["admin"]))):
+@router.get("/admin/dashboard")
+def admin_dashboard(current_user = Depends(RoleChecker(["admin"]))):
 
-    return {"message": "admin access granted","user": current_user}
+    return {"message": "Admin dashboarrd access granted","user": current_user}

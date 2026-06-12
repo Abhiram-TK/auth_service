@@ -8,10 +8,11 @@ from app.database.connection import get_db
 from app.schemas.user_schema import (UserResponse, RoleUpdateRequest)
 
 from app.services.user_service import (get_all_users, get_user_by_id, update_user_role, deactivate_user)
+from app.services.rbac_service import RoleChecker
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
-@router.get("/")
+@router.get("/", dependencies=[Depends(RoleChecker(["admin"]))])
 def fetch_all_users(db: Session = Depends(get_db)):
 
     users = get_all_users(db)
@@ -31,7 +32,7 @@ def fetch_all_users(db: Session = Depends(get_db)):
 
     return response
 
-@router.get("/{user_id}")
+@router.get("/{user_id}", dependencies=[Depends(RoleChecker(["admin"]))])
 def fetch_user(user_id: int, db: Session = Depends(get_db)):
 
     user = get_user_by_id(user_id, db)
@@ -45,7 +46,7 @@ def fetch_user(user_id: int, db: Session = Depends(get_db)):
         "is_active": user.is_active
     }
 
-@router.put("/{user_id}/role")
+@router.put("/{user_id}/role", dependencies=[Depends(RoleChecker(["admin"]))])
 def change_user_role(user_id: int, request: RoleUpdateRequest, db: Session = Depends(get_db)):
 
     user = update_user_role(user_id=user_id, role_name=request.role, db=db)
@@ -58,7 +59,7 @@ def change_user_role(user_id: int, request: RoleUpdateRequest, db: Session = Dep
     }
 
 
-@router.delete("/{user_id}")
+@router.delete("/{user_id}", dependencies=[Depends(RoleChecker(["admin"]))])
 def delete_user(user_id: int, db: Session = Depends(get_db)):
 
     return deactivate_user(user_id=user_id, db=db)

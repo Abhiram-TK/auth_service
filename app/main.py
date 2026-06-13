@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 
-from app.database.connection import engine, Base
+from sqlalchemy import text
+
+from app.database.connection import engine, Base, SessionLocal
 
 from app.models.user import User
 from app.models.role import Role
@@ -25,4 +27,23 @@ app.include_router(user_router)
 def home():
 
     return {"message": "Authentication service running"}
+
+@app.get("/health")
+def health_check():
+
+    db = SessionLocal()
+
+    try:
+
+        db.execute(text("SELECT 1"))
+
+        return {"status": "healthy", "database": "connected"}
+
+    except Exception:
+
+        return {"status": "unhealthy", "database": "disconnected"}
+
+    finally:
+
+        db.close()
 

@@ -13,9 +13,9 @@ def get_current_user(token: str | None = Depends(oauth2_scheme)):
 
     if not token:
 
-        logger.error("Authentication failed - missing tokens")
+        logger.warning("AUTHENTICATION FAILED | reason=missing_authorization_header")
 
-        raise HTTPException(status_code=401, detail="Not authenticated")
+        raise HTTPException(status_code=401, detail="Authorization token missing. Use Authorize and provide a valid JWT")
 
     payload = decode_access_token(token)
 

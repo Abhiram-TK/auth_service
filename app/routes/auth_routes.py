@@ -18,9 +18,9 @@ from app.core.logger import logger
 from app.core.security import hash_password, verify_password
 
 from app.services.rbac_service import (RoleChecker)
-from app.services.jwt_service import (create_access_token)
+from app.services.jwt_service import (create_access_token, decode_access_token)
 
-from app.middleware.auth_middleware import (get_current_user, decode_access_token)
+from app.middleware.auth_middleware import get_current_user
 
 
 router = APIRouter()
@@ -69,7 +69,7 @@ def register_user(request: RegisterRequest, db: Session = Depends(get_db)):
 
         raise HTTPException(status_code=500, detail="Database operation failed")
 
-    logger.info(f"User registered: {new_user.email}")
+    logger.info(f"USER_CREATED | id={new_user.id} | email={new_user.email}")
 
     return {"message": "user created"}
 
@@ -106,7 +106,7 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
 
     access_token = create_access_token({"user_id": user.id,"email": user.email, "role": user.role.name, "is_active": user.is_active})
 
-    logger.info(f"Token generated for: {user.email}")
+    logger.info(f"TOKEN_ISSUED | user_id={user.id} | email={user.email} | role={user.role.name}")
 
     logger.info(f"User login success: {user.email}")
 
@@ -118,13 +118,13 @@ def get_current_profile(current_user = Depends(get_current_user)):
 
     logger.info(f"Protected route accessed by: {current_user['email']}")
 
-    return {"emial": current_user["email"],"role": current_user["role"]}
+    return {"email": current_user["email"],"role": current_user["role"]}
 
 
 @router.get("/admin/dashboard")
 def admin_dashboard(current_user = Depends(RoleChecker(["admin"]))):
 
-    return {"message": "Admin dashboarrd access granted","user": current_user}
+    return {"message": "Admin dashboard access granted","user": current_user}
 
 
 @router.post("/validate-token")
@@ -135,5 +135,7 @@ def validate_token(request: TokenValidationRequest):
     if not payload:
 
         return {"valid": False}
+    
+    logger.info(f"TOKEN_VALIDATED | email={payload.get('email')}")
 
     return {"valid": True, "user_id": payload.get("user_id"), "email": payload.get("email"), "role": payload.get("role"), "is_active": payload.get("is_active")}

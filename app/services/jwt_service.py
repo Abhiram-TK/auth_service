@@ -27,8 +27,8 @@ def decode_access_token(token: str):
 
         return payload
 
-    except JWTError:
+    except JWTError as error:
 
-        logger.error("JWT validation failed")
+        logger.error(f"TOKEN_VALIDATION_FAILED | reason={str(error)}")
 
         return None

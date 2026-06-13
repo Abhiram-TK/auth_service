@@ -12,6 +12,7 @@ from app.models.user import User
 from app.models.role import Role
 
 from app.schemas.auth_schema import RegisterRequest, LoginRequest
+from app.schemas.token_schema import TokenValidationRequest
 
 from app.core.logger import logger
 from app.core.security import hash_password, verify_password
@@ -19,7 +20,7 @@ from app.core.security import hash_password, verify_password
 from app.services.rbac_service import (RoleChecker)
 from app.services.jwt_service import (create_access_token)
 
-from app.middleware.auth_middleware import (get_current_user)
+from app.middleware.auth_middleware import (get_current_user, decode_access_token)
 
 
 router = APIRouter()
@@ -117,10 +118,22 @@ def get_current_profile(current_user = Depends(get_current_user)):
 
     logger.info(f"Protected route accessed by: {current_user['email']}")
 
-    return {"user": current_user}
+    return {"emial": current_user["email"],"role": current_user["role"]}
 
 
 @router.get("/admin/dashboard")
 def admin_dashboard(current_user = Depends(RoleChecker(["admin"]))):
 
     return {"message": "Admin dashboarrd access granted","user": current_user}
+
+
+@router.post("/validate-token")
+def validate_token(request: TokenValidationRequest):
+
+    payload = decode_access_token(request.token)
+
+    if not payload:
+
+        return {"valid": False}
+
+    return {"valid": True, "user_id": payload.get("user_id"), "email": payload.get("email"), "role": payload.get("role"), "is_active": payload.get("is_active")}

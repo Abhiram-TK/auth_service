@@ -21,13 +21,17 @@ def get_user_by_id(user_id: int, db: Session):
 
     return user
 
-def update_user_role(user_id: int, role_name: str, db: Session):
+def update_user_role(user_id: int, role_name: str, current_admin_id: int,db: Session):
 
     user = (db.query(User).filter(User.id == user_id).first())
 
     if not user:
 
         raise HTTPException(status_code=404, detail="User not found")
+    
+    if user.id == current_admin_id:
+
+        raise HTTPException(status_code=400, detail="Administrators cannot modify their own role")
 
     role = (db.query(Role).filter(Role.name == role_name).first())
 
@@ -47,13 +51,17 @@ def update_user_role(user_id: int, role_name: str, db: Session):
     return user
 
 
-def deactivate_user(user_id: int, db: Session):
+def deactivate_user(user_id: int, current_admin_id: int, db: Session):
 
     user = (db.query(User).filter(User.id == user_id).first())
 
     if not user:
 
         raise HTTPException(status_code=404, detail="User not found")
+    
+    if user.id == current_admin_id:
+
+        raise HTTPException(status_code=400, detail="Administrators cannot disable their own account.")
 
     user.is_active = False
 

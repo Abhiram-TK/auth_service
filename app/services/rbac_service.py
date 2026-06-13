@@ -17,7 +17,7 @@ class RoleChecker:
 
         if user_role not in self.allowed_roles:
 
-            logger.error(f"RBAC denied - role={user_role}")
+            logger.warning(f"RBAC_DENIED | role={user_role}")
 
             raise HTTPException(status_code=403, detail="Permission denied")
 

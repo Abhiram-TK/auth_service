@@ -47,9 +47,9 @@ def fetch_user(user_id: int, db: Session = Depends(get_db)):
     }
 
 @router.put("/{user_id}/role", dependencies=[Depends(RoleChecker(["admin"]))])
-def change_user_role(user_id: int, request: RoleUpdateRequest, db: Session = Depends(get_db)):
+def change_user_role(user_id: int, request: RoleUpdateRequest, db: Session = Depends(get_db), current_user = Depends(RoleChecker(["admin"]))):
 
-    user = update_user_role(user_id=user_id, role_name=request.role, db=db)
+    user = update_user_role(user_id=user_id, role_name=request.role, current_admin_id=current_user["user_id"], db=db)
 
     return {
 
@@ -60,6 +60,6 @@ def change_user_role(user_id: int, request: RoleUpdateRequest, db: Session = Dep
 
 
 @router.delete("/{user_id}", dependencies=[Depends(RoleChecker(["admin"]))])
-def delete_user(user_id: int, db: Session = Depends(get_db)):
+def delete_user(user_id: int, db: Session = Depends(get_db), current_user = Depends(RoleChecker(["admin"]))):
 
-    return deactivate_user(user_id=user_id, db=db)
+    return deactivate_user(user_id=user_id, current_admin_id=current_user["user_id"], db=db)

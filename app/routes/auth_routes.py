@@ -81,13 +81,13 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
 
     if not user:
 
-        logger.error(f"Login failed - email not found: {form_data.username}")
+        logger.error(f"LOGIN_FAILED | reason=email_not_found: {form_data.username}")
 
         raise HTTPException(status_code=401, detail="invalid email or password")
 
     if not user.is_active:
 
-        logger.error(f"Login blocked - inactive account: {user.email}")
+        logger.error(f"LOGIN_BLOCKED | reason=inactive_account: {user.email}")
 
         raise HTTPException(status_code=403, detail="User account is disabled")
     
@@ -95,7 +95,7 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
 
     if not password_valid:
 
-        logger.error(f"Login failed - invalid password: {user.email}")
+        logger.error(f"LOGIN_FAILED | reason=invalid_password: {user.email}")
 
         raise HTTPException(status_code=401, detail="invalid email or password")
     

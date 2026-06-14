@@ -23,12 +23,22 @@ from app.services.jwt_service import (create_access_token, decode_access_token)
 from app.middleware.auth_middleware import get_current_user
 
 
-router = APIRouter()
+router = APIRouter(tags=["Authentication"])
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
-@router.post("/register")
+@router.post("/register", summary="Register New User", description="""
+             Create a new user account.
+
+             Requirements:
+
+             - Unique email
+             - Unique username
+             - Password minimum 8 characters
+
+             New users are assigned the Viewer role by default.""")
+
 def register_user(request: RegisterRequest, db: Session = Depends(get_db)):
 
     existing_email = db.query(User).filter(User.email == request.email).first()
@@ -74,7 +84,16 @@ def register_user(request: RegisterRequest, db: Session = Depends(get_db)):
     return {"message": "user created"}
 
 
-@router.post("/login")
+@router.post("/login", summary="Authenticate User", description="""
+             Authenticate a user using email and password.
+             
+             Returns:
+
+             - JWT access token
+             - Token type
+
+             Use the returned token to access protected endpoints.""")
+
 def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
 
     user = db.query(User).filter(User.email == form_data.username).first()
@@ -113,7 +132,20 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.get("/me")
+@router.get("/me", summary="Get current User Profile", description="""
+            Return information about the currently authenticated user.
+
+            Requires:
+
+            - Valid JWT token
+
+            Returns:
+
+            - User ID
+            - Email
+            - Role
+            - Active status""")
+
 def get_current_profile(current_user = Depends(get_current_user)):
 
     logger.info(f"Protected route accessed by: {current_user['email']}")
@@ -121,13 +153,33 @@ def get_current_profile(current_user = Depends(get_current_user)):
     return {"email": current_user["email"],"role": current_user["role"]}
 
 
-@router.get("/admin/dashboard")
+@router.get("/admin/dashboard", summary="Access Admin Dashboard", description="""
+            Administrative endpoint.
+
+            Requires:
+
+            - Valid JWT
+            - Admin role
+
+            Non-admin users receive 403 Forbidden.""")
+
 def admin_dashboard(current_user = Depends(RoleChecker(["admin"]))):
 
     return {"message": "Admin dashboard access granted","user": current_user}
 
 
-@router.post("/validate-token")
+@router.post("/validate-token", summary="Validate JWT Token", description="""
+             Validate a JWT token.
+
+             Used by external services to verify:
+
+             - Token validity
+             - User identity
+             - User role
+             - Account status
+
+             Returns validation result and user information.""")
+
 def validate_token(request: TokenValidationRequest):
 
     payload = decode_access_token(request.token)

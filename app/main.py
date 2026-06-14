@@ -16,7 +16,22 @@ from app.core.logger import logger
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(title="Authentication Service", description="""
+              Authentication and Authorization Service.
+
+              Features:
+
+              - User Registration
+              - User Authentication
+              - JWT Token Management
+              - Role-Based Access Control (RBAC)
+              - User Management
+              - Token Validation
+              
+              Used by:
+              
+              - Project 1 Transaction Processing API
+              - Project 4 Inventory Reservation API""", version="1.0.0")
 
 logger.info("Auth service started")
 

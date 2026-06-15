@@ -47,7 +47,8 @@ def fetch_user(user_id: int, db: Session = Depends(get_db)):
 
     user = get_user_by_id(user_id, db)
 
-    return {"id": user.id, "email": user.email, "username": user.username, "role": user.role.name, "is_active": user.is_active}
+    return {"id": user.id, "first_name": user.first_name, "last_name": user.last_name,"email": user.email, "username": user.username, "role": user.role.name, 
+            "is_active": user.is_active}
 
 
 @router.put("/{user_id}/role", summary="Change User Role", dependencies=[Depends(RoleChecker(["admin"]))], description="""

@@ -35,7 +35,8 @@ def register_user_service(request, db: Session):
 
     hashed_password = hash_password(request.password)
 
-    new_user = User(email=request.email, username=request.username, password_hash=hashed_password, role_id=default_role.id, is_active=True)
+    new_user = User(first_name=request.first_name, last_name=request.last_name, email=request.email, username=request.username, password_hash=hashed_password,
+                    role_id=default_role.id, is_active=True)
 
     try:
 

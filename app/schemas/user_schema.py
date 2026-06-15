@@ -3,6 +3,8 @@ from pydantic import BaseModel, Field
 class UserResponse(BaseModel):
 
     id: int
+    first_name: str
+    last_name: str
     email: str
     username: str
     role: str

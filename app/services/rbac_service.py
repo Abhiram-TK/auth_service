@@ -4,7 +4,6 @@ from app.middleware.auth_middleware import (get_current_user)
 
 from app.core.logger import logger
 
-
 class RoleChecker:
 
     def __init__(self, allowed_roles: list):

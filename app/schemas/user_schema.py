@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Literal
 
 class UserResponse(BaseModel):
 
@@ -14,4 +15,4 @@ class UserResponse(BaseModel):
 
 class RoleUpdateRequest(BaseModel):
 
-    role: str
+    role: Literal["viewer", "recruiter", "admin"]

@@ -1,6 +1,5 @@
 import bcrypt
 
-
 def hash_password(password: str):
 
     password_bytes = password.encode("utf-8")
@@ -8,7 +7,6 @@ def hash_password(password: str):
     hashed_password = bcrypt.hashpw(password_bytes, salt)
 
     return hashed_password.decode("utf-8")
-
 
 def verify_password(plain_password: str, hashed_password: str):
 

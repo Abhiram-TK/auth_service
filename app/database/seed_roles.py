@@ -19,7 +19,7 @@ def seed_roles():
 
             existing_role = (db.query(Role).filter(Role.name == role_data["name"]).first())
 
-            if not existing_role:
+            if existing_role:
 
                 existing_role.description = role_data["description"]
 

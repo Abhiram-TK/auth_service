@@ -3,7 +3,6 @@ from app.models.role import Role
 from app.models.user import User
 from app.models.permission import Permission
 
-
 PERMISSIONS = [
     {"name": "view_transactions", "description": "View transaction records"},
     {"name": "create_transactions", "description": "Create new transactions"},

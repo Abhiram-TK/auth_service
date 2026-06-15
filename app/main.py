@@ -13,7 +13,6 @@ from app.routes.user_routes import router as user_router
 
 from app.core.logger import logger
 
-
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Authentication Service", description="""
@@ -38,12 +37,20 @@ logger.info("Auth service started")
 app.include_router(auth_router)
 app.include_router(user_router)
 
-@app.get("/")
+@app.get("/", tags=["System"], summary="Home")
 def home():
 
     return {"message": "Authentication service running"}
 
-@app.get("/health")
+@app.get("/health", tags=["System"], summary="Health Check", description="""
+         Verify service availability and database connectivity.
+
+         Used by:
+
+         - Docker health checks
+         - Kubernetes readiness probes
+         - Monitoring systems""")
+
 def health_check():
 
     db = SessionLocal()
@@ -61,4 +68,3 @@ def health_check():
     finally:
 
         db.close()
-

@@ -7,9 +7,7 @@ from app.models.permission import Permission
 ROLE_PERMISSION_MAPPING = {
 
     "viewer": ["view_transactions", "view_inventory"],
-
     "recruiter": ["view_transactions", "create_transactions", "view_inventory", "reserve_inventory"],
-
     "admin": ["view_transactions", "create_transactions", "update_transactions", "view_inventory", "reserve_inventory", "dispatch_inventory"]}
 
 def seed_role_permissions():

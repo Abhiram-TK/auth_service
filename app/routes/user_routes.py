@@ -12,7 +12,7 @@ from app.services.rbac_service import RoleChecker
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
-@router.get("/", summary="Get All Users", dependencies=[Depends(RoleChecker(["admin"]))], description="""
+@router.get("/", response_model=list[UserResponse],summary="Get All Users", dependencies=[Depends(RoleChecker(["admin"]))], description="""
             Retrieve all registered users.
 
             Requires:
@@ -33,7 +33,8 @@ def fetch_all_users(db: Session = Depends(get_db)):
 
     return response
 
-@router.get("/{user_id}", summary="Get User By ID", dependencies=[Depends(RoleChecker(["admin"]))], description="""
+
+@router.get("/{user_id}", response_model=UserResponse,summary="Get User By ID", dependencies=[Depends(RoleChecker(["admin"]))], description="""
             Retrieve details for a specific user.
 
             Requires:
@@ -47,6 +48,7 @@ def fetch_user(user_id: int, db: Session = Depends(get_db)):
     user = get_user_by_id(user_id, db)
 
     return {"id": user.id, "email": user.email, "username": user.username, "role": user.role.name, "is_active": user.is_active}
+
 
 @router.put("/{user_id}/role", summary="Change User Role", dependencies=[Depends(RoleChecker(["admin"]))], description="""
             Assign a new role to a user.

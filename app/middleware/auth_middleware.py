@@ -11,9 +11,7 @@ from app.services.jwt_service import (decode_access_token)
 
 from app.core.logger import logger
 
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login", auto_error=False)
-
 
 def get_current_user(token: str | None = Depends(oauth2_scheme), db: Session = Depends(get_db)):
 

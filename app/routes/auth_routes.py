@@ -16,7 +16,6 @@ from app.services.auth_service import (register_user_service, login_user_service
 
 from app.middleware.auth_middleware import get_current_user
 
-
 router = APIRouter(tags=["Authentication"])
 
 @router.post("/register", summary="Register New User", description="""

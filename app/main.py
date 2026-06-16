@@ -18,22 +18,31 @@ from app.core.logger import logger
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Authentication Service", description="""
-              Authentication and Authorization Service.
-
+app = FastAPI(title="Authentication and Authorization Service", description="""
               Features:
 
               - User Registration
               - User Authentication
               - JWT Token Management
-              - Role-Based Access Control (RBAC)
-              - User Management
               - Token Validation
+              - User Management
+              - Role Management
+              - Permission Management
+              - Role-Permission Assignment
+              - Role-Based Access Control (RBAC)
+              
+              Security Features:
+              
+              - Password Hashing
+              - JWT Authentication
+              - Role Authorization
+              - Account Deactivation Protection
+              - Active User Validation
               
               Used by:
               
               - Project 1 Transaction Processing API
-              - Project 4 Inventory Reservation API""", version="1.0.0")
+              - Project 4 Inventory Reservation API""")
 
 logger.info("Auth service started")
 
@@ -43,7 +52,7 @@ app.include_router(role_router)
 app.include_router(permission_router)
 app.include_router(role_permission_router)
 
-@app.get("/", tags=["System"], summary="Home")
+@app.get("/", tags=["System"], summary="Service Information")
 def home():
 
     return {"message": "Authentication service running"}

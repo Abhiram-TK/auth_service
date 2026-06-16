@@ -6,6 +6,9 @@ from app.models.permission import Permission
 ROLES = [
     {"name": "viewer", "description": "Can view system resources"},
     {"name": "recruiter", "description": "Can create and manage business operations"},
+    {"name": "manager", "description": "Can supervise recruiters"},
+    {"name": "support", "description": "Can assist users and investigate issues"},
+    {"name": "auditor", "description": "Can review records and audit activities"},
     {"name": "admin", "description": "Full system access"}
 ]
 

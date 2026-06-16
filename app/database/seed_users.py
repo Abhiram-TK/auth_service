@@ -1,6 +1,6 @@
 from faker import Faker
 
-from random import randint, random
+from random import randint, random, choice
 
 from datetime import datetime, timedelta
 
@@ -14,6 +14,8 @@ from app.core.security import hash_password
 
 fake = Faker("en_IN")
 
+EMAIL_PROVIDERS = ["gmail.com", "outlook.com", "yahoo.com", "hotmail.com"]
+
 db = SessionLocal()
 
 def create_fake_user(role_id):
@@ -22,9 +24,11 @@ def create_fake_user(role_id):
 
     last_name = fake.last_name()
 
-    username = fake.unique.user_name()
+    username = (f"{first_name.lower()}"f"{last_name.lower()}"f"{randint(100,999)}")
 
-    email = fake.unique.email()
+    random_number = randint(100, 999)
+    provider = choice(EMAIL_PROVIDERS)
+    email = (f"{first_name.lower()}"f"{last_name.lower()}"f"{random_number}"f"@{provider}")
 
     password_hash = hash_password("Password123")
 
@@ -51,7 +55,9 @@ if __name__ == "__main__":
 
         support_role = (db.query(Role).filter(Role.name == "support").first())
 
-        if not all([viewer_role, recruiter_role, manager_role, admin_role, support_role]):
+        auditor_role = (db.query(Role).filter(Role.name == "auditor").first())
+
+        if not all([viewer_role, recruiter_role, manager_role, admin_role, support_role, auditor_role]):
 
             raise Exception("Required roles not found. Verify viewer, recruiter, manager, admin, and support roles exist.")
 
@@ -70,9 +76,12 @@ if __name__ == "__main__":
         for _ in range(2):
             create_fake_user(support_role.id)
 
+        for _ in range(2):
+            create_fake_user(auditor_role.id)
+
         db.commit()
 
-        print("45 users seeded successfully")
+        print("47 users seeded successfully")
 
     except Exception as error:
 

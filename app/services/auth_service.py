@@ -84,7 +84,7 @@ def login_user_service(form_data, db: Session):
     db.commit()
     db.refresh(user)
 
-    access_token = create_access_token({"user_id": user.id, "email": user.email, "role": user.role.name, "is_active": user.is_active})
+    access_token = create_access_token({"user_id": user.id, "email": user.email, "username": user.username,"role": user.role.name, "is_active": user.is_active})
 
     logger.info(f"TOKEN_ISSUED | user_id={user.id} | email={user.email} | role={user.role.name}")
 

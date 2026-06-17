@@ -10,7 +10,7 @@ from app.schemas.role_permission_schema import (AssignPermissionRequest, RolePer
 
 from app.services.role_permission_service import (get_role_permissions, assign_permission_to_role, remove_permission_from_role)
 
-router = APIRouter(tags=["Role Permissions Management"])
+router = APIRouter(tags=["Role Permissions"])
 
 @router.get("/roles/{role_id}/permissions", summary="Get Role Permissions", description="""
             Retrieve all permissions assigned to a role.

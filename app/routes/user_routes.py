@@ -29,7 +29,7 @@ def fetch_all_users(db: Session = Depends(get_db)):
 
     for user in users:
 
-        response.append({"id": user.id, "email": user.email, "username": user.username, "role": user.role.name, "is_active": user.is_active})
+        response.append({"id": user.id, "first_name": user.first_name, "last_name": user.last_name,"email": user.email, "username": user.username, "role": user.role.name, "is_active": user.is_active})
 
     return response
 
@@ -58,6 +58,9 @@ def fetch_user(user_id: int, db: Session = Depends(get_db)):
 
             - viewer
             - recruiter
+            - manager
+            - support
+            - auditor
             - admin
 
             Administrators cannot modify their own role.""")

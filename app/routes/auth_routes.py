@@ -67,7 +67,7 @@ def get_current_profile(current_user = Depends(get_current_user)):
 
     logger.info(f"PROFILE_ACCESSED | email={current_user['email']}")
 
-    return {"email": current_user["email"],"role": current_user["role"]}
+    return {"email": current_user["email"], "username": current_user["username"],"role": current_user["role"]}
 
 
 @router.get("/admin/dashboard", summary="Access Admin Dashboard", description="""

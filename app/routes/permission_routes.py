@@ -11,7 +11,7 @@ from app.services.rbac_service import RoleChecker
 
 router = APIRouter(prefix="/permissions", tags=["Permissions"])
 
-@router.get("/", response_model=list[PermissionResponse], summary="Get All Permissions", description="""
+@router.get("/", response_model=list[PermissionResponse], dependencies=[Depends(RoleChecker(["admin"]))],summary="Get All Permissions", description="""
             Return all permissions in the system.
 
             Requires:
@@ -19,12 +19,12 @@ router = APIRouter(prefix="/permissions", tags=["Permissions"])
             - Valid JWT
             - Admin role""")
 
-def fetch_permissions(db: Session = Depends(get_db), current_user = Depends(RoleChecker(["admin"]))):
+def fetch_permissions(db: Session = Depends(get_db)):
 
     return get_all_permissions(db)
 
 
-@router.post("/", response_model=PermissionResponse, summary="Create Permission", description="""
+@router.post("/", response_model=PermissionResponse, summary="Create Permission", dependencies=[Depends(RoleChecker(["admin"]))],description="""
              Create a new permission.
 
              Requires:
@@ -34,6 +34,6 @@ def fetch_permissions(db: Session = Depends(get_db), current_user = Depends(Role
 
              Permission names must be unique.""")
 
-def add_permission(request: PermissionCreateRequest, db: Session = Depends(get_db), current_user = Depends(RoleChecker(["admin"]))):
+def add_permission(request: PermissionCreateRequest, db: Session = Depends(get_db)):
 
     return create_permission(request=request, db=db)

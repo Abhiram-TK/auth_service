@@ -51,7 +51,7 @@ def fetch_user(user_id: int, db: Session = Depends(get_db)):
             "is_active": user.is_active}
 
 
-@router.put("/{user_id}/role", summary="Change User Role", dependencies=[Depends(RoleChecker(["admin"]))], description="""
+@router.put("/{user_id}/role", summary="Change User Role", description="""
             Assign a new role to a user.
 
             Available roles:
@@ -72,7 +72,7 @@ def change_user_role(user_id: int, request: RoleUpdateRequest, db: Session = Dep
     return {"message": "Role updated successfully", "user_id": user.id, "new_role": user.role.name}
 
 
-@router.delete("/{user_id}", summary="Disable User Account", dependencies=[Depends(RoleChecker(["admin"]))], description="""
+@router.delete("/{user_id}", summary="Disable User Account", description="""
                Soft delete a user account.
                
                The account remains in the database but becomes inactive.

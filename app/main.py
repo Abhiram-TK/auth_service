@@ -30,7 +30,8 @@ tags_metadata = [
     
     {"name": "Role Permissions", "description": "Role-to-permission assignment and RBAC relationship management."},
     
-    {"name": "System", "description": "Service information and health monitoring."}
+    {"name": "System", "description": "Service information and health monitoring."
+}
 ]
 
 app = FastAPI(title="Authentication and Authorization Service", version="1.0.0", description=

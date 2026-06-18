@@ -18,31 +18,30 @@ from app.core.logger import logger
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Authentication and Authorization Service", description="""
-              Features:
+tags_metadata = [
 
-              - User Registration
-              - User Authentication
-              - JWT Token Management
-              - Token Validation
-              - User Management
-              - Role Management
-              - Permission Management
-              - Role-Permission Assignment
-              - Role-Based Access Control (RBAC)
-              
-              Security Features:
-              
-              - Password Hashing
-              - JWT Authentication
-              - Role Authorization
-              - Account Deactivation Protection
-              - Active User Validation
-              
-              Used by:
-              
-              - Project 1 Transaction Processing API
-              - Project 4 Inventory Reservation API""")
+    {"name": "Authentication", "description": "User registration, login, JWT generation and token validation."},
+
+    {"name": "Users", "description": "User administration and account management."},
+    
+    {"name": "Roles", "description": "Role creation and RBAC role management."},
+    
+    {"name": "Permissions", "description": "Permission catalog management."},
+    
+    {"name": "Role Permissions", "description": "Role-to-permission assignment and RBAC relationship management."},
+    
+    {"name": "System", "description": "Service information and health monitoring."}
+]
+
+app = FastAPI(title="Authentication and Authorization Service", version="1.0.0", description=
+              """Centralized authentication and authorization platform.
+
+              Provides user authentication, JWT token management, role-based access control (RBAC), permission management, 
+              and identity services for connected backend applications.
+
+              Integrated Services:
+              - Transaction Processing API
+              - Inventory Reservation API""", openapi_tags=tags_metadata, contact={"name": "Abhiram TK", "url": "https://github.com/Abhiram-TK", "email": "abhiramtksuresh@example.com"})
 
 logger.info("Auth service started")
 

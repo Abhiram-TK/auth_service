@@ -37,12 +37,25 @@ def register_user(request: RegisterRequest, db: Session = Depends(get_db)):
 @router.post("/login", summary="Authenticate User", description="""
              Authenticate a user using email and password.
              
+             Example Credentials:
+             
+             username = user@test.com
+             password = Password123
+             
              Returns:
-
-             - JWT access token
-             - Token type
-
-             Use the returned token to access protected endpoints.""")
+             
+             - JWT Access Token
+             - Token Type
+             
+             Token Contains:
+             
+             - user_id
+             - email
+             - username
+             - role
+             - is_active
+             
+             Use the token via Swagger Authorize.""")
 
 def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
 

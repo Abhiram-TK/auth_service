@@ -8,16 +8,16 @@ from app.database.connection import get_db
 from app.schemas.user_schema import (UserResponse, RoleUpdateRequest)
 
 from app.services.user_service import (get_all_users, get_user_by_id, update_user_role, deactivate_user)
-from app.services.rbac_service import RoleChecker
+from app.services.permission_checker import PermissionChecker
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
-@router.get("/", response_model=list[UserResponse],summary="Get All Users", dependencies=[Depends(RoleChecker(["admin"]))], description="""
+@router.get("/", response_model=list[UserResponse],summary="Get All Users", dependencies=[Depends(PermissionChecker(["view_users"]))], description="""
             Retrieve all registered users.
 
             Requires:
 
-            - Admin role
+            - view_users permission
 
             Returns a list of users with role and account status.""")
 
@@ -34,14 +34,14 @@ def fetch_all_users(db: Session = Depends(get_db)):
     return response
 
 
-@router.get("/{user_id}", response_model=UserResponse,summary="Get User By ID", dependencies=[Depends(RoleChecker(["admin"]))], description="""
+@router.get("/{user_id}", response_model=UserResponse,summary="Get User By ID", dependencies=[Depends(PermissionChecker(["view_users"]))], description="""
             Retrieve details for a specific user.
 
             Requires:
 
-            - Admin role
+            - view_users permission
 
-            Returns user information if found.""")
+            Returns user profile information.""")
 
 def fetch_user(user_id: int, db: Session = Depends(get_db)):
 
@@ -52,20 +52,15 @@ def fetch_user(user_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{user_id}/role", summary="Change User Role", description="""
-            Assign a new role to a user.
+            Assign a role to a user.
 
-            Available roles:
+            Requires:
+            
+            - assign_roles permission
+            
+            Updates the user's assigned role.""")
 
-            - viewer
-            - recruiter
-            - manager
-            - support
-            - auditor
-            - admin
-
-            Administrators cannot modify their own role.""")
-
-def change_user_role(user_id: int, request: RoleUpdateRequest, db: Session = Depends(get_db), current_user = Depends(RoleChecker(["admin"]))):
+def change_user_role(user_id: int, request: RoleUpdateRequest, db: Session = Depends(get_db), current_user = Depends(PermissionChecker(["assign_roles"]))):
 
     user = update_user_role(user_id=user_id, role_name=request.role, current_admin_id=current_user["user_id"], db=db)
 
@@ -73,17 +68,14 @@ def change_user_role(user_id: int, request: RoleUpdateRequest, db: Session = Dep
 
 
 @router.delete("/{user_id}", summary="Disable User Account", description="""
-               Soft delete a user account.
+               Disable a user account.
                
-               The account remains in the database but becomes inactive.
-               
-               Disabled users:
-               
-               - Cannot log in
-               - Cannot access protected endpoints
-               
-               Administrators cannot disable their own account.""")
+               Requires:
 
-def delete_user(user_id: int, db: Session = Depends(get_db), current_user = Depends(RoleChecker(["admin"]))):
+               - disable_users permission
+               
+               Disabled users cannot access protected endpoints.""")
+
+def delete_user(user_id: int, db: Session = Depends(get_db), current_user = Depends(PermissionChecker(["disable_users"]))):
 
     return deactivate_user(user_id=user_id, current_admin_id=current_user["user_id"], db=db)

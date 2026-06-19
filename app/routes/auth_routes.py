@@ -8,10 +8,11 @@ from app.core.logger import logger
 
 from app.database.connection import get_db
 
+from app.models.user import User
+
 from app.schemas.auth_schema import RegisterRequest
 from app.schemas.token_schema import TokenValidationRequest
 
-from app.services.rbac_service import (RoleChecker)
 from app.services.auth_service import (register_user_service, login_user_service, validate_token_service)
 
 from app.middleware.auth_middleware import get_current_user
@@ -25,7 +26,6 @@ router = APIRouter(tags=["Authentication"])
 
              - Unique email
              - Unique username
-             - Password minimum 8 characters
 
              New users are assigned the Viewer role by default.""")
 
@@ -35,27 +35,13 @@ def register_user(request: RegisterRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/login", summary="Authenticate User", description="""
-             Authenticate a user using email and password.
-             
-             Example Credentials:
-             
-             username = user@test.com
-             password = Password123
+             Authenticate a user and generate a JWT access token.
              
              Returns:
              
-             - JWT Access Token
-             - Token Type
-             
-             Token Contains:
-             
-             - user_id
-             - email
-             - username
-             - role
-             - is_active
-             
-             Use the token via Swagger Authorize.""")
+             - Access token
+             - Token type
+             - User identity claims""")
 
 def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
 
@@ -63,52 +49,48 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
 
 
 @router.get("/me", summary="Get current User Profile", description="""
-            Return information about the currently authenticated user.
+            Return the currently authenticated user's profile.
 
             Requires:
 
             - Valid JWT token
 
-            Returns:
-
-            - User ID
-            - Email
-            - Role
-            - Active status""")
+            Returns user identity information.""")
 
 def get_current_profile(current_user = Depends(get_current_user)):
 
     logger.info(f"PROFILE_ACCESSED | email={current_user['email']}")
 
-    return {"email": current_user["email"], "username": current_user["username"],"role": current_user["role"]}
+    return {"user_id": current_user["user_id"], "email": current_user["email"], "username": current_user["username"],"role": current_user["role"]}
 
-
-@router.get("/admin/dashboard", summary="Access Admin Dashboard", description="""
-            Administrative endpoint.
+@router.get("/me/permissions", summary="Get Current User Permissions", description="""
+            Return permissions assigned to the current user.
 
             Requires:
 
-            - Valid JWT
-            - Admin role
+            - Valid JWT token
 
-            Non-admin users receive 403 Forbidden.""")
+            Returns role and effective permissions.""")
 
-def admin_dashboard(current_user = Depends(RoleChecker(["admin"]))):
+def get_current_user_permissions(current_user=Depends(get_current_user), db: Session = Depends(get_db)):
 
-    return {"message": "Admin dashboard access granted","user": current_user}
+    user = (db.query(User).filter(User.id == current_user["user_id"]).first())
+
+    permissions = sorted(
+
+        permission.name
+
+        for permission in user.role.permissions
+
+    )
+
+    return {"user_id": user.id, "username": user.username, "role": user.role.name, "permissions": permissions}
 
 
 @router.post("/validate-token", summary="Validate JWT Token", description="""
-             Validate a JWT token.
+             Validate a JWT access token.
 
-             Used by external services to verify:
-
-             - Token validity
-             - User identity
-             - User role
-             - Account status
-
-             Returns validation result and user information.""")
+             Returns token validity and user identity information.""")
 
 def validate_token(request: TokenValidationRequest):
 

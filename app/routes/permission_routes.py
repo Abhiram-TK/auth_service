@@ -7,30 +7,30 @@ from app.database.connection import get_db
 from app.schemas.permission_schema import (PermissionCreateRequest, PermissionResponse)
 
 from app.services.permission_service import (get_all_permissions, create_permission)
-from app.services.rbac_service import RoleChecker
+from app.services.permission_checker import PermissionChecker
 
 router = APIRouter(prefix="/permissions", tags=["Permissions"])
 
-@router.get("/", response_model=list[PermissionResponse], dependencies=[Depends(RoleChecker(["admin"]))],summary="Get All Permissions", description="""
-            Return all permissions in the system.
+@router.get("/", response_model=list[PermissionResponse], dependencies=[Depends(PermissionChecker(["view_permissions"]))],summary="Get All Permissions", description="""
+            Retrieve all available permissions.
 
             Requires:
 
-            - Valid JWT
-            - Admin role""")
+            - view_permissions permission
+            
+            Returns the permission catalog.""")
 
 def fetch_permissions(db: Session = Depends(get_db)):
 
     return get_all_permissions(db)
 
 
-@router.post("/", response_model=PermissionResponse, summary="Create Permission", dependencies=[Depends(RoleChecker(["admin"]))],description="""
+@router.post("/", response_model=PermissionResponse, summary="Create Permission", dependencies=[Depends(PermissionChecker(["create_permissions"]))],description="""
              Create a new permission.
 
              Requires:
 
-             - Valid JWT
-             - Admin role
+             - create_permissions permission
 
              Permission names must be unique.""")
 

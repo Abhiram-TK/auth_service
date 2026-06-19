@@ -61,30 +61,8 @@ def get_current_profile(current_user = Depends(get_current_user)):
 
     logger.info(f"PROFILE_ACCESSED | email={current_user['email']}")
 
-    return {"user_id": current_user["user_id"], "email": current_user["email"], "username": current_user["username"],"role": current_user["role"]}
-
-@router.get("/me/permissions", summary="Get Current User Permissions", description="""
-            Return permissions assigned to the current user.
-
-            Requires:
-
-            - Valid JWT token
-
-            Returns role and effective permissions.""")
-
-def get_current_user_permissions(current_user=Depends(get_current_user), db: Session = Depends(get_db)):
-
-    user = (db.query(User).filter(User.id == current_user["user_id"]).first())
-
-    permissions = sorted(
-
-        permission.name
-
-        for permission in user.role.permissions
-
-    )
-
-    return {"user_id": user.id, "username": user.username, "role": user.role.name, "permissions": permissions}
+    return {"user_id": current_user["user_id"], "email": current_user["email"], "username": current_user["username"],"role": current_user["role"],
+            "permissions": current_user["permissions"]}
 
 
 @router.post("/validate-token", summary="Validate JWT Token", description="""

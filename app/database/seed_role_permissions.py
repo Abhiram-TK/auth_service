@@ -6,35 +6,42 @@ from app.models.permission import Permission
 
 ROLE_PERMISSION_MAPPING = {
 
-    "viewer": ["view_transactions", "view_inventory"],
+    "viewer": ["view_transactions", "view_inventory",
+               "view_products", "view_reservations",
+               "view_dispatches"],
 
-    "recruiter": ["view_transactions", "create_transactions",
-                  "view_inventory", "reserve_inventory"],
+    "recruiter": ["create_transactions", "view_transactions",
+                  "view_inventory", "reserve_inventory",
+                  "view_products", "view_reservations",
+                  "view_dispatches"],
 
     "support": ["view_users", "view_transactions",
-                "view_inventory"],
+                "view_inventory", "view_products",
+                "view_reservations", "view_dispatches"],
 
     "auditor": ["view_transactions", "view_inventory",
-                "audit_inventory", "export_transactions"],
+                "view_products", "view_reservations",
+                "view_dispatches"],
 
-    "manager": ["view_transactions", "create_transactions",
-                "update_transactions", "approve_transactions",
-                "view_users", "update_users",
-                "view_roles"],
+    "manager": ["create_transactions", "view_transactions",
+                "update_transactions", "view_inventory",
+                "reserve_inventory", "dispatch_inventory",
+                "view_products", "view_reservations",
+                "view_dispatches", "process_events",
+                "view_users", "view_roles"],
 
-    "admin": ["view_transactions", "create_transactions",
-              "update_transactions", "delete_transactions",
-              "approve_transactions", "cancel_transactions",
-              "export_transactions", "view_inventory",
-              "reserve_inventory", "dispatch_inventory",
-              "receive_inventory", "adjust_inventory",
-              "audit_inventory", "view_users",
-              "create_users", "update_users",
-              "disable_users", "view_roles",
+    "admin": ["create_transactions", "view_transactions",
+              "update_transactions", "view_inventory",
+              "reserve_inventory", "view_products",
+              "view_reservations", "dispatch_inventory",
+              "view_dispatches", "process_events",
+              "view_users", "disable_users",
+              "view_roles", "create_roles",
               "assign_roles", "view_permissions",
-              "assign_permissions"]
-
+              "create_permissions", "assign_permissions"]
+              
 }
+
 
 def seed_role_permissions():
 

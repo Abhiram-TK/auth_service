@@ -19,6 +19,8 @@ from app.core.logger import logger
 Base.metadata.create_all(bind=engine)
 
 tags_metadata = [
+    
+    {"name": "System", "description": "Service information and health monitoring."},
 
     {"name": "Authentication", "description": "User registration, login, JWT generation and token validation."},
 
@@ -28,10 +30,8 @@ tags_metadata = [
     
     {"name": "Permissions", "description": "Permission catalog management."},
     
-    {"name": "Role Permissions", "description": "Role-to-permission assignment and RBAC relationship management."},
+    {"name": "Role Permissions", "description": "Role-to-permission assignment and RBAC relationship management."}
     
-    {"name": "System", "description": "Service information and health monitoring."
-}
 ]
 
 app = FastAPI(title="Authentication and Authorization Service", version="1.0.0", description=
@@ -55,7 +55,7 @@ app.include_router(role_permission_router)
 @app.get("/", tags=["System"], summary="Service Information")
 def home():
 
-    return {"message": "Authentication service running"}
+    return {"message": "Authentication and Authorization service running"}
 
 @app.get("/health", tags=["System"], summary="Health Check", description="""
          Verify service availability and database connectivity.
@@ -63,7 +63,6 @@ def home():
          Used by:
 
          - Docker health checks
-         - Kubernetes readiness probes
          - Monitoring systems""")
 
 def health_check():

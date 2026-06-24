@@ -26,6 +26,8 @@ This service acts as the central security layer for the portfolio ecosystem and 
 - SQLAlchemy
 - JWT
 - Pydantic
+- Passlib (bcrypt)
+- Faker
 - Uvicorn
 
 ## Authorization Model
@@ -45,6 +47,70 @@ Permissions
   ↓
 Protected Endpoint
 ```
+
+## Authentication Workflow
+
+### Login Flow
+
+```text
+User Login
+      ↓
+Credentials Validated
+      ↓
+Role Retrieved
+      ↓
+Permissions Retrieved
+      ↓
+JWT Generated
+      ↓
+Token Returned
+```
+
+### Authorization Flow
+
+```text
+Client Request
+      ↓
+JWT Validation
+      ↓
+Permission Extraction
+      ↓
+Permission Checker
+      ↓
+Access Granted / Denied
+```
+
+## Integration
+
+This service issues JWT tokens used by:
+
+- Sales Transaction Service
+- Inventory Reservation & Dispatch System
+
+Integration flow:
+
+```text
+Authentication Service
+          │
+          ▼
+      JWT Token
+          │
+          ▼
+Sales Transaction Service
+          │
+          ▼
+Inventory Reservation &
+Dispatch System
+```
+
+The token contains:
+
+- User ID
+- Username
+- Role
+- Permissions
+
+allowing connected services to perform authorization without querying the authentication database.
 
 ## API Modules
 
@@ -80,21 +146,62 @@ Protected Endpoint
 - POST `/roles/{role_id}/permissions`
 - DELETE `/roles/{role_id}/permissions/{permission_name}`
 
-## Integration
+## Seed Data
 
-This service issues JWT tokens used by:
+The project uses Faker to generate development and testing data.
 
-- Sales Transaction Service
-- Inventory Reservation & Dispatch System
+Generated data includes:
 
-The token contains:
-
-- User ID
-- Username
-- Role
+- Users
+- Roles
 - Permissions
+- Role-Permission Assignments
 
-allowing connected services to perform authorization without querying the authentication database.
+This enables realistic testing without manually creating records.
+
+## Project Structure
+
+```text
+app/
+├── core/
+│   ├── config.py
+│   ├── logger.py
+│   └── security.py
+│
+├── database/
+│   └── connection.py
+│
+├── models/
+│   ├── user.py
+│   ├── role.py
+│   ├── permission.py
+│   └── role_permission.py
+│
+├── schemas/
+│   ├── user_schema.py
+│   ├── role_schema.py
+│   └── permission_schema.py
+│
+├── routes/
+│   ├── auth_routes.py
+│   ├── user_routes.py
+│   ├── role_routes.py
+│   ├── permission_routes.py
+│   └── role_permission_routes.py
+│
+├── services/
+│   ├── auth_service.py
+│   ├── jwt_service.py
+│   ├── rbac_service.py
+│   └── permission_checker.py
+│
+├── seed/
+│   ├── seed_roles.py
+│   ├── seed_permissions.py
+│   └── seed_role_permissions.py
+│
+└── main.py
+```
 
 ## Run Locally
 

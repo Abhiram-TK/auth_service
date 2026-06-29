@@ -162,45 +162,32 @@ This enables realistic testing without manually creating records.
 ## Project Structure
 
 ```text
-app/
-├── core/
-│   ├── config.py
-│   ├── logger.py
-│   └── security.py
+auth_service/
+├── app/
+│   ├── core/
+│   │   ├── config.py
+│   │   ├── logger.py
+│   │   └── security.py
+│   │
+│   ├── database/
+│   │   └── connection.py
+│   │
+│   ├── models/
+│   │   ├── user.py
+│   │   ├── role.py
+│   │   ├── permission.py
+│   │   └── role_permission.py
+│   │
+│   ├── routes/
+│   ├── schemas/
+│   ├── services/
+│   ├── seed/
+│   └── main.py
 │
-├── database/
-│   └── connection.py
-│
-├── models/
-│   ├── user.py
-│   ├── role.py
-│   ├── permission.py
-│   └── role_permission.py
-│
-├── schemas/
-│   ├── user_schema.py
-│   ├── role_schema.py
-│   └── permission_schema.py
-│
-├── routes/
-│   ├── auth_routes.py
-│   ├── user_routes.py
-│   ├── role_routes.py
-│   ├── permission_routes.py
-│   └── role_permission_routes.py
-│
-├── services/
-│   ├── auth_service.py
-│   ├── jwt_service.py
-│   ├── rbac_service.py
-│   └── permission_checker.py
-│
-├── seed/
-│   ├── seed_roles.py
-│   ├── seed_permissions.py
-│   └── seed_role_permissions.py
-│
-└── main.py
+├── logs/
+├── .env.example
+├── requirements.txt
+└── README.md
 ```
 
 ## Run Locally
@@ -213,13 +200,36 @@ pip install -r requirements.txt
 
 ### Configure Environment
 
-Create a `.env` file:
+Copy:
 
-```env
-DATABASE_URL=postgresql://user:password@localhost/auth_db
-SECRET_KEY=your_secret_key
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
+```text
+.env.example
+```
+
+to
+
+```text
+.env
+```
+
+### Seed Development Data
+
+Populate the database with sample users, roles, permissions, and role-permission assignments.
+
+```bash
+python app/database/seed_users.py
+```
+
+```bash
+python app/database/seed_roles.py
+```
+
+```bash
+python app/database/seed_permissions.py
+```
+
+```bash
+python app/database/seed_role_permissions.py
 ```
 
 ### Start Application
@@ -231,5 +241,25 @@ uvicorn app.main:app --reload --port 8000
 ### Swagger UI
 
 ```text
-http://localhost:8000/docs
+http://127.0.1:8000/docs
 ```
+
+## Current Status
+
+Implemented
+
+- User registration
+- User authentication
+- JWT generation
+- JWT validation
+- Permission-based authorization
+- Role management
+- Permission management
+- Role-permission assignment
+- Protected endpoints
+- Swagger documentation
+
+Next Phase
+
+- Docker containerization
+- Docker Compose deployment

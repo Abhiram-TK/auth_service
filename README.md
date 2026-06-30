@@ -163,31 +163,61 @@ This enables realistic testing without manually creating records.
 
 ```text
 auth_service/
-├── app/
-│   ├── core/
+
+├── app
+│   ├── core
 │   │   ├── config.py
 │   │   ├── logger.py
 │   │   └── security.py
 │   │
-│   ├── database/
-│   │   └── connection.py
+│   ├── database
+│   │   ├── __init__.py
+│   │   ├── connection.py
+│   │   ├── seed_permissions.py
+│   │   ├── seed_role_permissions.py
+│   │   ├── seed_roles.py
+│   │   └── seed_users.py
 │   │
-│   ├── models/
-│   │   ├── user.py
-│   │   ├── role.py
+│   ├── middleware
+│   │   └── auth_middleware.py
+│   │
+│   ├── models
 │   │   ├── permission.py
-│   │   └── role_permission.py
+│   │   ├── role.py
+│   │   └── user.py
 │   │
-│   ├── routes/
-│   ├── schemas/
-│   ├── services/
-│   ├── seed/
+│   ├── routes
+│   │   ├── auth_routes.py
+│   │   ├── permission_routes.py
+│   │   ├── role_permission_routes.py
+│   │   ├── role_routes.py
+│   │   └── user_routes.py
+│   │
+│   ├── schemas
+│   │   ├── auth_schema.py
+│   │   ├── permission_schema.py
+│   │   ├── role_permission_schema.py
+│   │   ├── role_schema.py
+│   │   ├── token_schema.py
+│   │   └── user_schema.py
+│   │
+│   ├── services
+│   │   ├── auth_service.py
+│   │   ├── jwt_service.py
+│   │   ├── permission_checker.py
+│   │   ├── permission_service.py
+│   │   ├── rbac_service.py
+│   │   ├── role_permission_service.py
+│   │   ├── role_service.py
+│   │   └── user_service.py
+│   │
+│   ├── __init__.py
 │   └── main.py
 │
-├── logs/
 ├── .env.example
-├── requirements.txt
-└── README.md
+├── .gitignore
+├── README.md
+└── requirements.txt
 ```
 
 ## Run Locally

@@ -1,5 +1,7 @@
 # Authentication & Authorization Service
 
+## Overview
+
 Authentication and Authorization Service built with FastAPI, PostgreSQL, JWT Authentication, and Permission-Based Access Control (PBAC).
 
 This service acts as the central security layer for the portfolio ecosystem and is consumed by the Sales Transaction Service and Inventory Reservation & Dispatch System.
@@ -18,7 +20,7 @@ This service acts as the central security layer for the portfolio ecosystem and 
 - Protected Endpoints
 - Swagger Documentation
 
-## Technology Stack
+## Techn Stack
 
 - Python
 - FastAPI
@@ -220,7 +222,55 @@ auth_service/
 └── requirements.txt
 ```
 
-## Run Locally
+---
+
+## Configuration
+
+Configuration is managed through environment variables.
+
+Example:
+
+```env
+DATABASE_URL=postgresql://username:password@localhost:5432/auth_db
+
+SECRET_KEY=your-secret-key
+
+ALGORITHM=HS256
+
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
+
+Copy `.env.example` to `.env` before running the application.
+
+---
+
+## Running the Project
+
+### Clone Repository
+
+```bash
+git clone https://github.com/Abhiram-TK/auth_service.git
+```
+
+### Navigate into Project
+
+```bash
+cd auth_service
+```
+
+### Create Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+### Activate Virtual Environment
+
+Windows
+
+```bash
+venv\Scripts\activate
+```
 
 ### Install Dependencies
 
@@ -242,6 +292,8 @@ to
 .env
 ```
 
+Update the values for your local environment.
+
 ### Seed Development Data
 
 Populate the database with sample users, roles, permissions, and role-permission assignments.
@@ -262,17 +314,39 @@ python app/database/seed_permissions.py
 python app/database/seed_role_permissions.py
 ```
 
-### Start Application
+### Start API
 
 ```bash
 uvicorn app.main:app --reload --port 8000
 ```
 
-### Swagger UI
+---
+
+## Swagger UI
 
 ```text
-http://127.0.1:8000/docs
+http://127.0.0.1:8000/docs
 ```
+
+Swagger provides:
+
+- Interactive endpoint testing
+- JWT authentication
+- Request validation
+- Response schemas
+
+---
+
+## Related Projects
+
+This service is designed to work with:
+
+- Sales Transaction Service
+- Inventory Reservation & Dispatch System
+
+Together these services demonstrate a simple multi-service backend architecture using multiple FastAPI services.
+
+---
 
 ## Current Status
 

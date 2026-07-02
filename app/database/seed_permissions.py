@@ -54,7 +54,11 @@ def seed_permissions():
 
             existing_permission = (db.query(Permission).filter(Permission.name == permission_data["name"]).first())
 
-            if not existing_permission:
+            if existing_permission:
+
+                existing_permission.description = permission_data["description"]
+
+            else:
 
                 db.add(Permission(**permission_data))
 

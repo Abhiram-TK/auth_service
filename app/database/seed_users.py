@@ -16,12 +16,13 @@ fake = Faker("en_IN")
 
 EMAIL_PROVIDERS = ["gmail.com", "outlook.com", "yahoo.com", "hotmail.com"]
 
-db = SessionLocal()
+ROLE_USER_COUNTS = {"viewer": 25, "recruiter": 10, "manager": 5, "admin": 3, "support": 2, "auditor": 2}
 
-def create_fake_user(role_id):
+TOTAL_EXPECTED_USERS = sum(ROLE_USER_COUNTS.values())
+
+def create_fake_user(db, role_id):
 
     first_name = fake.first_name()
-
     last_name = fake.last_name()
 
     username = (f"{first_name.lower()}"f"{last_name.lower()}"f"{randint(100,999)}")
@@ -41,47 +42,71 @@ def create_fake_user(role_id):
 
     db.add(user)
 
-if __name__ == "__main__":
+    return 1
+
+def seed_users():
+    """
+    Seed demo users for every role.
+
+    Safe to call from:
+    - seed.py
+    - startup event
+    - command line
+    """
+
+    db = SessionLocal()
+
+    created_users = 0
+    existing_users = 0
 
     try:
 
-        viewer_role = (db.query(Role).filter(Role.name == "viewer").first())
+        roles = {role.name: role 
+                 for role in db.query(Role).all()}
 
-        recruiter_role = (db.query(Role).filter(Role.name == "recruiter").first())
+        missing_roles = [
+            role_name
+            for role_name in ROLE_USER_COUNTS
+            if role_name not in roles
+        ]
 
-        manager_role = (db.query(Role).filter(Role.name == "manager").first())
+        if missing_roles:
 
-        admin_role = (db.query(Role).filter(Role.name == "admin").first())
+            raise Exception(f"Required roles not found: {', '.join(missing_roles)}")
 
-        support_role = (db.query(Role).filter(Role.name == "support").first())
+        for role_name, target_count in ROLE_USER_COUNTS.items():
 
-        auditor_role = (db.query(Role).filter(Role.name == "auditor").first())
+            role = roles[role_name]
 
-        if not all([viewer_role, recruiter_role, manager_role, admin_role, support_role, auditor_role]):
+            existing_count = (db.query(User).filter(User.role_id == role.id).count())
 
-            raise Exception("Required roles not found. Verify viewer, recruiter, manager, admin, and support roles exist.")
+            if existing_count >= target_count:
 
-        for _ in range(25):
-            create_fake_user(viewer_role.id)
+                print(f"{role_name}: {existing_count}/{target_count} users already exist. Skipping.")
 
-        for _ in range(10):
-            create_fake_user(recruiter_role.id)
+                existing_users += existing_count
 
-        for _ in range(5):
-            create_fake_user(manager_role.id)
+                continue
 
-        for _ in range(3):
-            create_fake_user(admin_role.id)
+            existing_users += existing_count
 
-        for _ in range(2):
-            create_fake_user(support_role.id)
+            missing_users = target_count - existing_count
 
-        for _ in range(2):
-            create_fake_user(auditor_role.id)
+            print(f"{role_name}: creating {missing_users} missing users.")
+
+            for _ in range(missing_users):
+
+                created_users += create_fake_user(db, role.id)
 
         db.commit()
 
-        print("47 users seeded successfully")
+        print("\n========== User Seed Summary ==========")
+
+        print(f"Users expected : {TOTAL_EXPECTED_USERS}")
+        print(f"Users existing : {existing_users}")
+        print(f"Users created  : {created_users}")
+
+        print("=======================================\n")
 
     except Exception as error:
 
@@ -89,6 +114,11 @@ if __name__ == "__main__":
 
         print(f"Seeder failed: {error}")
 
+        raise
+
     finally:
 
         db.close()
+
+if __name__ == "__main__":
+    seed_users()

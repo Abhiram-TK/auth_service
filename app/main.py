@@ -1,8 +1,10 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from sqlalchemy import text
 
 from app.database.connection import engine, Base, SessionLocal
+from app.database.seed import run_all_seeds
 
 from app.models.user import User
 from app.models.role import Role
@@ -16,7 +18,25 @@ from app.routes.role_permission_routes import router as role_permission_router
 
 from app.core.logger import logger
 
-Base.metadata.create_all(bind=engine)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Initialize the application before serving requests.
+    """
+
+    logger.info("Creating database tables...")
+
+    Base.metadata.create_all(bind=engine)
+
+    logger.info("Running database seed orchestrator...")
+
+    run_all_seeds()
+
+    logger.info("Authentication service startup completed.")
+
+    yield
+
+    logger.info("Authentication service shutting down...")
 
 tags_metadata = [
     
@@ -42,9 +62,10 @@ app = FastAPI(title="Authentication and Authorization Service", version="1.0.0",
 
               Integrated Services:
               - Transaction Processing API
-              - Inventory Reservation API""", openapi_tags=tags_metadata, contact={"name": "Abhiram TK", "url": "https://github.com/Abhiram-TK", "email": "abhiramtksuresh@example.com"})
+              - Inventory Reservation API""", openapi_tags=tags_metadata, lifespan=lifespan, 
+              contact={"name": "Abhiram TK", "url": "https://github.com/Abhiram-TK", "email": "abhiramtksuresh@example.com"})
 
-logger.info("Auth service started")
+logger.info("Authentication service started")
 
 app.include_router(auth_router)
 app.include_router(user_router)

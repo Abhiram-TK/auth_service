@@ -1,10 +1,98 @@
-# Authentication & Authorization Service
+# Project 1 - Authentication & Authorization Service
 
-## Overview
+> Portfolio Project 1
 
-Authentication and Authorization Service built with FastAPI, PostgreSQL, JWT Authentication, and Permission-Based Access Control (PBAC).
+Central authentication and authorization service for the Backend Transaction Ecosystem.
 
-This service acts as the central security layer for the portfolio ecosystem and is consumed by the Sales Transaction Service and Inventory Reservation & Dispatch System.
+## Project Overview
+
+The Authentication Service is the identity provider for the Backend Transaction Ecosystem.
+
+Primary responsibilities:
+
+- User registration
+- User authentication
+- JWT token generation
+- Role-Based Access Control (RBAC)
+- Permission management
+
+This service must be started before all other services.
+
+## Ecosystem Position
+
+This service is the entry point of the backend ecosystem.
+
+Startup Order
+
+```text
+      Authentication Service
+                ↓
+    Inventory Dispatch System
+                ↓
+    Sales Transaction Service
+                ↓
+  Reconciliation Automation Engine
+```
+
+Responsibilities
+
+- Authentication
+- Authorization
+- JWT issuance
+- Role Based Access Control
+- Permission management
+
+Consumed by
+
+- Inventory Dispatch System
+- Sales Transaction Service
+- Reconciliation Automation Engine
+
+## Backend Ecosystem
+
+```text
+              Backend Transaction Ecosystem
+
+           Authentication Service (Project 1)
+                       Port 8001
+                           │
+                           ▼
+         Inventory Dispatch System (Project 2)
+                       Port 8002
+                           │
+                           ▼
+          Sales Transaction Service (Project 3)
+                       Port 8003
+                           │
+                           ▼
+      Reconciliation Automation Engine (Project 4)
+
+Performance Optimization & Caching
+(Project 5)
+Cross-cutting service
+```
+
+## Recruiter Workflow Diagram
+
+```text
+    Clone Repository
+            ↓
+   Install Dependencies
+            ↓
+     Configure .env
+            ↓
+     Run Application
+            ↓
+Automatic Database Initialization
+            ↓
+  Automatic Seed Execution
+            ↓
+    Swagger Available
+            ↓
+        Test APIs
+            ↓
+    Integration Ready
+```
 
 ## Features
 
@@ -20,7 +108,7 @@ This service acts as the central security layer for the portfolio ecosystem and 
 - Protected Endpoints
 - Swagger Documentation
 
-## Techn Stack
+## Technology Stack
 
 - Python
 - FastAPI
@@ -317,7 +405,7 @@ python app/database/seed_role_permissions.py
 ### Start API
 
 ```bash
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --reload --port 8001
 ```
 
 ---
@@ -325,7 +413,7 @@ uvicorn app.main:app --reload --port 8000
 ## Swagger UI
 
 ```text
-http://127.0.0.1:8000/docs
+http://127.0.0.1:8001/docs
 ```
 
 Swagger provides:
@@ -339,12 +427,12 @@ Swagger provides:
 
 ## Related Projects
 
-This service is designed to work with:
-
-- Sales Transaction Service
-- Inventory Reservation & Dispatch System
-
-Together these services demonstrate a simple multi-service backend architecture using multiple FastAPI services.
+| Service                            | Purpose                            |
+| ---------------------------------- | ---------------------------------- |
+| Inventory Dispatch System          | Product inventory and reservations |
+| Sales Transaction Service          | Transaction processing             |
+| Reconciliation Automation Engine   | Financial reconciliation           |
+| Performance Optimization & Caching | Performance benchmarking (future)  |
 
 ---
 

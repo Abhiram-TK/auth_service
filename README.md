@@ -16,6 +16,14 @@ Primary responsibilities:
 - Role-Based Access Control (RBAC)
 - Permission management
 
+The Authentication Service is the authoritative owner of:
+
+- Users
+- Roles
+- Permissions
+
+No downstream service owns or modifies this data directly.
+
 This service must be started before all other services.
 
 ## Ecosystem Position
@@ -107,6 +115,8 @@ Automatic Database Initialization
 - Permission-Based Authorization
 - Protected Endpoints
 - Swagger Documentation
+- Automatic Database Initialization
+- Automatic Seed Orchestration
 
 ## Technology Stack
 
@@ -175,7 +185,7 @@ Access Granted / Denied
 This service issues JWT tokens used by:
 
 - Sales Transaction Service
-- Inventory Reservation & Dispatch System
+- Inventory Dispatch System
 
 Integration flow:
 
@@ -185,12 +195,9 @@ Authentication Service
           ▼
       JWT Token
           │
-          ▼
-Sales Transaction Service
+          ├──────────────► Inventory Dispatch System
           │
-          ▼
-Inventory Reservation &
-Dispatch System
+          └──────────────► Sales Transaction Service
 ```
 
 The token contains:
@@ -263,6 +270,7 @@ auth_service/
 │   ├── database
 │   │   ├── __init__.py
 │   │   ├── connection.py
+│   │   ├── seed.py
 │   │   ├── seed_permissions.py
 │   │   ├── seed_role_permissions.py
 │   │   ├── seed_roles.py
@@ -384,22 +392,23 @@ Update the values for your local environment.
 
 ### Seed Development Data
 
-Populate the database with sample users, roles, permissions, and role-permission assignments.
+Database initialization is handled through the project's seed orchestrator.
+
+The orchestrator executes all seed modules in the correct dependency order and inserts only missing records.
+
+Seed execution includes:
+
+- Roles
+- Permissions
+- Role-Permission Assignments
+- Users
+
+When the application starts, the database initialization process invokes the seed orchestrator automatically.
+
+Manual execution (if required):
 
 ```bash
-python app/database/seed_users.py
-```
-
-```bash
-python app/database/seed_roles.py
-```
-
-```bash
-python app/database/seed_permissions.py
-```
-
-```bash
-python app/database/seed_role_permissions.py
+python app/database/seed.py
 ```
 
 ### Start API
@@ -427,12 +436,12 @@ Swagger provides:
 
 ## Related Projects
 
-| Service                            | Purpose                            |
-| ---------------------------------- | ---------------------------------- |
-| Inventory Dispatch System          | Product inventory and reservations |
-| Sales Transaction Service          | Transaction processing             |
-| Reconciliation Automation Engine   | Financial reconciliation           |
-| Performance Optimization & Caching | Performance benchmarking (future)  |
+| Service                            | Relationship                                  |
+| ---------------------------------- | --------------------------------------------- |
+| Inventory Dispatch System          | Consumes JWT authentication and authorization |
+| Sales Transaction Service          | Consumes JWT authentication and authorization |
+| Reconciliation Automation Engine   | Consumes JWT authentication and authorization |
+| Performance Optimization & Caching | Future cross-cutting service                  |
 
 ---
 
@@ -450,6 +459,8 @@ Implemented
 - Role-permission assignment
 - Protected endpoints
 - Swagger documentation
+- Automatic database initialization
+- Automatic seed orchestration
 
 Next Phase
 

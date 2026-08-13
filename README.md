@@ -89,13 +89,33 @@ Cross-cutting service
             ↓
      Configure .env
             ↓
-     Run Application
+```
+
+#### Automatic Bootstrapping
+
+During application startup the following sequence is executed automatically.
+
+```text
+    Application Startup
             ↓
-Automatic Database Initialization
+   Create Database Tables
             ↓
-  Automatic Seed Execution
+    Run Seed Orchestrator
             ↓
-    Swagger Available
+       Seed Roles
+            ↓
+     Seed Permissions
+            ↓
+   Seed Role-Permissions
+            ↓
+        Seed Users
+            ↓
+     Startup Complete
+            ↓
+     Swagger Available
+```
+
+```text
             ↓
         Test APIs
             ↓
@@ -324,7 +344,7 @@ auth_service/
 
 Configuration is managed through environment variables.
 
-Example:
+Minimum required configuration:
 
 ```env
 DATABASE_URL=postgresql://username:password@localhost:5432/auth_db
@@ -335,6 +355,10 @@ ALGORITHM=HS256
 
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 ```
+
+All runtime configuration is loaded from environment variables.
+
+No secrets are hardcoded into the application.
 
 Copy `.env.example` to `.env` before running the application.
 
@@ -389,6 +413,15 @@ to
 ```
 
 Update the values for your local environment.
+
+The application reads all runtime configuration from `.env` during startup.
+
+Verify the following before launching:
+
+- PostgreSQL is running.
+- `DATABASE_URL` points to the correct database.
+- `SECRET_KEY` is configured.
+- `.env` has been created from `.env.example`.
 
 ### Seed Development Data
 

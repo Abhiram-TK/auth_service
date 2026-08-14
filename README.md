@@ -200,6 +200,28 @@ Permission Checker
 Access Granted / Denied
 ```
 
+### Recruiter Workflow
+
+For Project 1 Swagger:
+
+- Use the demo account email and password with the Swagger Authorize flow to test protected Authentication Service endpoints.
+
+For Projects 2 and 3:
+
+```text
+POST /login
+      ↓
+Demo email + password
+      ↓
+JWT access_token returned
+      ↓
+Copy access_token
+      ↓
+Project 2 / Project 3 Swagger Authorize
+      ↓
+Paste JWT access_token
+```
+
 ## Integration
 
 This service issues JWT tokens used by:
@@ -275,6 +297,19 @@ Generated data includes:
 - Role-Permission Assignments
 
 This enables realistic testing without manually creating records.
+
+## Recruiter / Demo Account
+
+A fresh deployment automatically creates one deterministic demo administrator in addition to the Faker-generated development users.
+
+### Demo Credentials
+
+```text
+Email:    demo.admin@portfolio.local
+Username: demo_admin
+Password: Password123
+Role:     admin
+```
 
 ## Project Structure
 

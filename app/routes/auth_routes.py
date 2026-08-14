@@ -39,7 +39,7 @@ def register_user(request: RegisterRequest, db: Session = Depends(get_db)):
              
              Returns:
              
-             - Access token
+             - JWT Access token
              - Token type
              - User identity claims""")
 
@@ -53,7 +53,7 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
 
             Requires:
 
-            - Valid JWT token
+            - Valid JWT access token
 
             Returns user identity information.""")
 

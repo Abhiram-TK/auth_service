@@ -11,4 +11,8 @@ class Settings:
     ALGORITHM = os.getenv("ALGORITHM")
     ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES",30))
 
+    DEMO_ADMIN_EMAIL = os.getenv("DEMO_ADMIN_EMAIL")
+    DEMO_ADMIN_USERNAME = os.getenv("DEMO_ADMIN_USERNAME")
+    DEMO_ADMIN_PASSWORD = os.getenv("DEMO_ADMIN_PASSWORD")
+
 settings = Settings()

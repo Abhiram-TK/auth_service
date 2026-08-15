@@ -1,5 +1,7 @@
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from sqlalchemy import text
 
@@ -64,6 +66,15 @@ app = FastAPI(title="Authentication and Authorization Service", version="1.0.0",
               - Transaction Processing API
               - Inventory Reservation API""", openapi_tags=tags_metadata, lifespan=lifespan, 
               contact={"name": "Abhiram TK", "url": "https://github.com/Abhiram-TK", "email": "abhiramtksuresh@example.com"})
+
+app.add_middleware(CORSMiddleware,
+                   allow_origins=["http://127.0.0.1:8002",
+                                  "http://localhost:8002",
+                                  "http://127.0.0.1:8003",
+                                  "http://localhost:8003"],
+                   allow_credentials=False,
+                   allow_methods=["POST"],
+                   allow_headers=["Content-Type"])
 
 logger.info("Authentication service started")
 

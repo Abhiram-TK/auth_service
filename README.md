@@ -204,23 +204,34 @@ Access Granted / Denied
 
 For Project 1 Swagger:
 
-- Use the demo account email and password with the Swagger Authorize flow to test protected Authentication Service endpoints.
+1. Use the demo email and password with Swagger's Authorize control.
+2. Swagger obtains and stores the JWT for protected requests.
+3. Execute protected endpoints such as `GET /me`.
+
+Important:
+
+- Manually executing `POST /login` returns a JWT in the response body but does not automatically authorize Swagger.
+- Protected endpoints such as `GET /me` receive the JWT through the `Authorization: Bearer <JWT>` header established by Swagger's Authorize control.
+- `GET /me` therefore has no JWT request parameter.
+
+For direct JWT validation:
+
+1. Execute `POST /login` with the demo credentials.
+2. Copy the returned `access_token`.
+3. Execute `POST /validate-token`.
+4. Paste the complete JWT into the `token` request-body field.
+5. A valid token should return `valid = true`.
+
+`POST /validate-token` directly validates the supplied JWT and does not use Swagger's Authorize state.
 
 For Projects 2 and 3:
 
-```text
-POST /login
-      ↓
-Demo email + password
-      ↓
-JWT access_token returned
-      ↓
-Copy access_token
-      ↓
-Project 2 / Project 3 Swagger Authorize
-      ↓
-Paste JWT access_token
-```
+1. Execute `POST /login` with the demo credentials.
+2. Copy the returned `access_token`.
+3. Open the Project 2 or Project 3 Swagger Authorize control.
+4. Paste the JWT access token into the authorization field.
+
+---
 
 ## Integration
 

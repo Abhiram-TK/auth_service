@@ -37,11 +37,7 @@ def register_user(request: RegisterRequest, db: Session = Depends(get_db)):
 @router.post("/login", summary="Authenticate User", description="""
              Authenticate a user and generate a JWT access token.
              
-             Returns:
-             
-             - JWT Access token
-             - Token type
-             - User identity claims""")
+             Manually executing this endpoint returns the JWT but does not automatically authorize Swagger.""")
 
 def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
 
@@ -51,11 +47,9 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
 @router.get("/me", summary="Get current User Profile", description="""
             Return the currently authenticated user's profile.
 
-            Requires:
-
-            - Valid JWT access token
-
-            Returns user identity information.""")
+            Requires a JWT through the Authorization: Bearer <JWT> header.
+            
+            Use Swagger's Authorize control to provide authentication.""")
 
 def get_current_profile(current_user = Depends(get_current_user)):
 
@@ -66,9 +60,9 @@ def get_current_profile(current_user = Depends(get_current_user)):
 
 
 @router.post("/validate-token", summary="Validate JWT Token", description="""
-             Validate a JWT access token.
+             Validate a JWT access token supplied in the request body..
 
-             Returns token validity and user identity information.""")
+             This endpoint directly validates the provided token and does not use Swagger's Authorize state.""")
 
 def validate_token(request: TokenValidationRequest):
 

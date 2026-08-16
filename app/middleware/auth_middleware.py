@@ -19,7 +19,8 @@ def get_current_user(token: str | None = Depends(oauth2_scheme), db: Session = D
 
         logger.warning("AUTHENTICATION FAILED | reason=missing_authorization_header")
 
-        raise HTTPException(status_code=401, detail="Authorization token missing. Use Authorize and provide a valid JWT")
+        raise HTTPException(status_code=401,
+                            detail="JWT missing from Authorization: Bearer header. Use Swagger's Authorize control.")
 
     payload = decode_access_token(token)
 

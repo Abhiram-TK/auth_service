@@ -1,5 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class TokenValidationRequest(BaseModel):
 
-    token: str
+    token: str = Field(...,
+                       description="Complete JWT access token returned by POST /login.")

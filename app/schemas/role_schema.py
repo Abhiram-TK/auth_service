@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 class RoleCreateRequest(BaseModel):
 
@@ -12,6 +12,4 @@ class RoleResponse(BaseModel):
     name: str
     description: str
 
-    class Config:
-
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

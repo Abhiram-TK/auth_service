@@ -12,11 +12,11 @@ from app.models.user import User
 from app.models.role import Role
 from app.models.permission import Permission
 
-from app.routes.auth_routes import router as auth_router
-from app.routes.user_routes import router as user_router
-from app.routes.role_routes import router as role_router
-from app.routes.permission_routes import router as permission_router
-from app.routes.role_permission_routes import router as role_permission_router
+from app.api.auth_routes import router as auth_router
+from app.api.user_routes import router as user_router
+from app.api.role_routes import router as role_router
+from app.api.permission_routes import router as permission_router
+from app.api.role_permission_routes import router as role_permission_router
 
 from app.core.logger import logger
 

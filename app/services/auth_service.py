@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import HTTPException
 
@@ -79,7 +79,7 @@ def login_user_service(form_data, db: Session):
 
         raise HTTPException(status_code=401, detail="invalid email or password")
 
-    user.last_login = datetime.utcnow()
+    user.last_login = datetime.now(timezone.utc)
 
     db.commit()
     db.refresh(user)

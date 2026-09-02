@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 
 from app.database.connection import Base
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 class User(Base):
 
@@ -25,9 +25,9 @@ class User(Base):
 
     role_id = Column(Integer, ForeignKey("roles.id"))
 
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
 
     last_login = Column(DateTime, nullable=True)
 

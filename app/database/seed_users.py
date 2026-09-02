@@ -2,7 +2,7 @@ from faker import Faker
 
 from random import randint, random, choice
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from app.database.connection import SessionLocal
 
@@ -47,7 +47,7 @@ def create_fake_user(db, role_id):
 
     is_active = random() > 0.07
 
-    last_login = datetime.utcnow() - timedelta(days=randint(0, 30))
+    last_login = datetime.now(timezone.utc) - timedelta(days=randint(0, 30))
 
     user = User(first_name=first_name,
                 last_name=last_name,
